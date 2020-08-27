@@ -62,7 +62,7 @@
     },
 
 
-/*
+    /*
          _             _     _
      ___| |_ __ _ _ __| |_  | |__   ___ _ __ ___ _
     / __| __/ _` | '__| __| | '_ \ / _ \ '__/ _ (_)
@@ -79,12 +79,34 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      // get the rows and store in a variable
+      var eachRow = this.get(rowIndex);
+      var sideLength = this.get('n');
+      // get the length of the side
+      // create a counter variable
+      var counter = 0;
+      // iterate through the row using the length of the side
+      for (var i = 0; i < sideLength; i++) {
+        // add each row's value to the counter
+
+        counter += eachRow[i];
+      }
+      // if counter is greater than 1, return true;
+      return counter > 1;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var sideLength = this.get('n');
+      // iterate through the sideLength
+      for (var i = 0; i < sideLength; i++) {
+        // if the call hasRowConflictAt with each i index is true
+        if (this.hasRowConflictAt(i)) {
+          // return true
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -94,12 +116,33 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      // create variable to store number of columns
+      var sideLength = this.get('n');
+      // counter variable = 0
+      var counter = 0;
+      // iteratre through the rows
+      for (var i = 0; i < sideLength; i++) {
+        // var to store number of rows
+        var eachRow = this.get(i);
+        // add to counter, each row at i
+        counter += eachRow[colIndex];
+      }
+      // return if counter is greater than 1
+      return counter > 1;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var sideLength = this.get('n');
+      // iterate through the sideLength
+      for (var i = 0; i < sideLength; i++) {
+        // if the call hasRowConflictAt with each i index is true
+        if (this.hasColConflictAt(i)) {
+          // return true
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -109,27 +152,92 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      // variable to store side length
+      var sideLength = this.get('n');
+      // add counter variable
+      var counter = 0;
+      // add row counter
+      var rowIndex = 0;
+      var columnIndex = majorDiagonalColumnIndexAtFirstRow;
+
+      // create a start variable for major
+      // for loop with condition, if row < sideLength, columns < sideLength,
+      for (; rowIndex < sideLength && columnIndex < sideLength; rowIndex++, columnIndex++) {
+        // if (columnIndex > 0) then run
+        // store to counter each row taking index i in a variable
+        if ( columnIndex >= 0) {
+          var eachRow = this.get(rowIndex);
+          counter += eachRow[columnIndex];
+        }
+
+        // counter += {Row, Column}
+        // [{0,-3}, {1,-2}, {2,-1}, !{3,0}!]
+        // [{4,-3}, {5,-2}, {6,-1}, !{7,0}!]
+        // [{0,-3}, {1,-2}, {2,-1}, !{3,0}!]
+      }
+      return counter > 1;
+      // if counter is greater than 1, return true
+
     },
+
+
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      var sideLength = this.get('n');
+      // iterate through the first row
+      // passing into the function: [-3, -2, -1, 0, 1, 2, 3];
+      for (var i = 1 - sideLength; i < sideLength; i++) {
+        if (this.hasMajorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     },
-
-
 
     // Minor Diagonals - go from top-right to bottom-left
     // --------------------------------------------------------------
     //
-    // test if a specific minor diagonal on this board contains a conflict
+    // test if a specific minor diagonal-on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      // variable to store side length
+      var sideLength = this.get('n');
+      // add counter variable
+      var counter = 0;
+      // add row counter
+      var rowIndex = 0;
+      var columnIndex = minorDiagonalColumnIndexAtFirstRow;
+
+
+      // create a start variable for major
+      // for loop with condition, if row < sideLength, columns < sideLength,
+      for (; rowIndex < sideLength && columnIndex >= 0; rowIndex++, columnIndex--) {
+        // if (columnIndex > 0) then run
+        // store to counter each row taking index i in a variable
+        if ( columnIndex < sideLength) {
+          var eachRow = this.get(rowIndex);
+          counter += eachRow[columnIndex];
+        }
+
+        // counter += {Row, Column}
+        // [{0,-3}, {1,-2}, {2,-1}, !{3,0}!]
+        // [{4,-3}, {5,-2}, {6,-1}, !{7,0}!]
+        // [{0,-3}, {1,-2}, {2,-1}, !{3,0}!]
+      }
+      return counter > 1;
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var sideLength = this.get('n');
+      // iterate through the first row
+      // passing into the function: [-3, -2, -1, 0, 1, 2, 3];
+      for (var i = sideLength + sideLength - 2; i >= 0; i--) {
+        if (this.hasMinorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
